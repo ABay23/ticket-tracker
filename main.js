@@ -10,7 +10,7 @@ let tStatus = 'Open'
 const fetchTickets = () => {
   const tickets = JSON.parse(localStorage.getItem('tickets'))
 
-  // ticketList.innerHTML = ''
+  ticketList.innerHTML = ''
 
   for (let i = 0; i < tickets.length; i++) {
     const id = tickets[i].id
@@ -30,8 +30,8 @@ const fetchTickets = () => {
               <p>${description} </p>
               <p><i class="bi bi-clock-history">${severity}</i> <i class="bi bi-person-circle"> ${assignetTo}</i> </p>
               <button type="submit" class="btn btn-warning" onclick="setStatusClosed('${id}')">Close</button>
+              <button type="submit" class="btn btn-danger" onclick="deleteIssue('${id}')">Delete</button>
               </div>`
-    // <button type="submit" class="btn btn-danger" onclick="deleteIssue(${id})">Delete</button>
     ticketList.insertAdjacentHTML('beforeend', content)
   }
 }
@@ -81,7 +81,13 @@ const setStatusClosed = (id) => {
 
 const deleteIssue = (id) => {
   const tickets = JSON.parse(localStorage.getItem('tickets'))
-  tickets.filter((ticket) => ticket.id !== id)
+  for (let i = 0; i < tickets.length; i++) {
+    if (tickets[i].id === id) {
+      tickets.splice(i, 1)
+    }
+  }
+  localStorage.setItem('tickets', JSON.stringify(tickets))
+  fetchTickets()
 }
 
 loadTickets()
